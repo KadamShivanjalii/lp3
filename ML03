@@ -1,0 +1,48 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix, accuracy_score
+from sklearn.metrics import precision_score, recall_score
+
+# Load dataset
+df = pd.read_csv("diabetes.csv")
+
+# Replace invalid zeros with column median
+cols = ['Glucose', 'BloodPressure', 'SkinThickness',
+        'Insulin', 'BMI']
+df[cols] = df[cols].replace(0, pd.NA)
+df[cols] = df[cols].fillna(df[cols].median())
+
+# Features and target
+X = df.drop('Outcome', axis=1)
+y = df['Outcome']
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42)
+
+# Feature scaling
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+# KNN model
+model = KNeighborsClassifier(n_neighbors=5)
+model.fit(X_train, y_train)
+
+# Prediction
+y_pred = model.predict(X_test)
+
+# Evaluation
+cm = confusion_matrix(y_test, y_pred)
+acc = accuracy_score(y_test, y_pred)
+err = 1 - acc
+pre = precision_score(y_test, y_pred, zero_division=0)
+rec = recall_score(y_test, y_pred, zero_division=0)
+
+print("Confusion Matrix:\n", cm)
+print("Accuracy:", acc)
+print("Error Rate:", err)
+print("Precision:", pre)
+print("Recall:", rec)
