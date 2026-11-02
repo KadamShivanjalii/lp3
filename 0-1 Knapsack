@@ -1,0 +1,32 @@
+
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n, W, w[20], p[20], dp[21][101] = {};
+
+    cout << "Enter number of items: ";
+    cin >> n;
+
+    for(int i = 1; i <= n; i++) {
+        cout << "Enter weight and profit: ";
+        cin >> w[i] >> p[i];
+    }
+
+    cout << "Enter capacity: ";
+    cin >> W;
+
+    for(int i = 1; i <= n; i++)
+        for(int j = 0; j <= W; j++) {
+            dp[i][j] = dp[i-1][j];
+
+            if(w[i] <= j)
+                dp[i][j] = max(dp[i][j],
+                               p[i] + dp[i-1][j-w[i]]);
+        }
+
+    cout << "Maximum Profit: " << dp[n][W];
+
+    return 0;
+}
