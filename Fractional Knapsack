@@ -1,0 +1,52 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int main()
+{
+    int n, w[20], p[20];
+    float cap, total = 0, r[20];
+
+    cout << "Enter number of Items:";
+    cin >> n;
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << "\nEnter Weight and Profit : ";
+        cin >> w[i] >> p[i];
+        r[i] = (float)p[i] / w[i];
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            if (r[i] < r[j])
+            {
+                swap(r[i], r[j]);
+                swap(p[i], p[j]);
+                swap(w[i], w[j]);
+            }
+        }
+    }
+
+    cout << "\nKnapsack Capacity :";
+    cin >> cap;
+
+    for (int i = 0; i < n; i++)
+    {
+        if (w[i] <= cap)
+        {
+            total += p[i];
+            cap -= w[i];
+        }
+        else
+        {
+            total += r[i] * cap;
+            break;
+        }
+    }
+
+    cout << "\nMaximum Profit :" << total;
+    return 0;
+}
