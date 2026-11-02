@@ -1,0 +1,58 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int main()
+{
+    int n;
+    cout << "Enter the number of Jobs: ";
+    cin >> n;
+
+    int d[20], p[20], id[20];
+    int slot[20] = {0};
+
+    for (int i = 0; i < n; i++)
+    {
+        id[i] = i + 1;
+        cout << "Enter Deadline and Profit :";
+        cin >> d[i] >> p[i];
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            if (p[i] < p[j])
+            {
+                swap(p[i], p[j]);
+                swap(d[i], d[j]);
+                swap(id[i], id[j]);
+            }
+        }
+    }
+
+    int total = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = d[i] - 1; j >= 0; j--)
+        {
+            if (slot[j] == 0)
+            {
+                slot[j] = id[i];
+                total += p[i];
+                break;
+            }
+        }
+    }
+    cout << "\nSelected Jobs :";
+    for (int i = 0; i < 20; i++)
+    {
+        if (slot[i] != 0)
+        {
+            cout << "J" << slot[i] << " ";
+        }
+    }
+    cout << "\nMaximum Profit :" << total;
+    return 0;
+}
